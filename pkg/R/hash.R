@@ -26,7 +26,7 @@
 #' \code{character} vector is hashed separately, based on the underlying
 #' \code{char} representation in \code{C}.
 #'
-#'
+#' @example ../examples/hash.R
 #' @export
 hash <- function(x,...){
   UseMethod('hash')
