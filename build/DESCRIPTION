@@ -1,4 +1,4 @@
-Package: stringdist
+Package: hashr
 Maintainer: Mark van der Loo <mark.vanderloo@gmail.com>
 License: GPL-3
 Title: Hash R Objects to Integers Fast
