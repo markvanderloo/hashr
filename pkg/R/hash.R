@@ -43,11 +43,13 @@ hash.default <- function(x,...){
 #' @method hash character
 #'
 #' @param recursive hash each element separately?
+#' @param nthread maximum number of threads used in paralellisation
 #' @rdname hash
 #' @export 
-hash.character <- function(x, recursive=TRUE, ...){
+hash.character <- function(x, recursive=TRUE, nthread=getOption("hashr_num_thread"),...){
+  stopifnot(is.numeric(nthread))
   if (recursive){
-    .Call("R_hash_charvec",x)
+    .Call("R_hash_charvec",x,as.integer(nthread))
   } else {
     hash.default(x,...)
   }

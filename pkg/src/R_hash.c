@@ -20,7 +20,9 @@
 #include <Rdefines.h>
 #include <stdint.h>
 #include "sfh.h"
-
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
 SEXP R_hash_raw(SEXP X){
   PROTECT(X);
@@ -35,19 +37,34 @@ SEXP R_hash_raw(SEXP X){
   return h;
 }
 
-SEXP R_hash_charvec(SEXP X){
+SEXP R_hash_charvec(SEXP X, SEXP NTHRD){
   PROTECT(X);
-  int n = length(X);
+  PROTECT(NTHRD);
+  int n = length(X)
+    , nthrd = INTEGER(NTHRD)[0];
 
   SEXP H;
   PROTECT(H = allocVector(INTSXP,length(X)));
-  int *h = INTEGER(H);
 
-  for (int i = 0; i < n; i++, h++) {  
-   (*h) = (int) SuperFastHash( CHAR(STRING_ELT(X,i)), length(STRING_ELT(X,i)));
-  }
+  #ifdef _OPENMP
+  #pragma omp parallel num_threads(nthrd)
+  #endif
+  {
+    int *h = INTEGER(H)
+      , ID = 0
+      , nthreads = 1L;
+    #ifdef _OPENMP
+    ID = omp_get_thread_num();
+    nthreads = omp_get_num_threads();
+    h += ID; 
+    #endif
+    for (int i = ID; i < n; i += nthreads ) {
+     (*h) = (int) SuperFastHash( CHAR(STRING_ELT(X,i)), length(STRING_ELT(X,i)));
+     h += nthreads;
+    }
+  }// end of parallel region
 
-  UNPROTECT(2);
+  UNPROTECT(3);
   return H;
 
 }
