@@ -62,6 +62,7 @@ hash.character <- function(x, recursive=TRUE, nthread=getOption("hashr_num_threa
 #' @export 
 hash.list <- function(x, recursive=TRUE, ...){
   if (recursive){
+    # todo: multicore over x
     lapply(x,hash,...)
   } else {
     hash.default(x,...)

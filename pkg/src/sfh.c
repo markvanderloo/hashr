@@ -1,5 +1,7 @@
 /* The code below is copied with much gratitude from Paul Hsieh's
  * website: http://www.azillionmonkeys.com/qed/hash.html
+ *
+ * This file is released under the GPL 2.1 license.
  */
 
 
