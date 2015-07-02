@@ -70,6 +70,69 @@ SEXP R_hash_charvec(SEXP X, SEXP NTHRD){
 }
 
 
+// hash a list consisting of only character vectors
+SEXP R_hash_charlist(SEXP X, SEXP NTHRD){
+  PROTECT(X);
+  PROTECT(NTHRD);
+  int n = length(X)
+    , nthrd = INTEGER(NTHRD)[0];
+
+  SEXP out;
+  out = PROTECT(allocVector(VECSXP,n));
+
+  int ni = 0;
+  // we can't parallelize this because R's allocation isn't thread-safe :-(
+  for ( int i = 0 ; i < n; i++ ){
+    ni = length(VECTOR_ELT(X,i));
+    SET_VECTOR_ELT(out, i, allocVector(INTSXP, ni));
+  }
+
+  SEXP S;
+  int *v;
+
+  #ifdef _OPENMP
+  #pragma omp parallel for num_threads(nthrd)
+  #endif
+  for ( int i = 0; i < n; i++ ){
+    S = VECTOR_ELT(X,i);
+    v = INTEGER(VECTOR_ELT(out, i));
+    ni = length(S);
+    for ( int j = 0; j < ni; j++){
+      v[j] = SuperFastHash( CHAR(STRING_ELT(S,j)),length(STRING_ELT(S,j)) );
+    }
+    
+  }
+
+
+  UNPROTECT(3);
+  return out;
+
+}
+
+// Determine whether all elements of a list are of type charater.
+SEXP R_all_char(SEXP X){
+  PROTECT(X);
+  SEXP all_char;
+  all_char = PROTECT(allocVector(LGLSXP,1L));
+
+  int n = length(X);
+  LOGICAL(all_char)[0] =  1L;
+  for (int i=0; i<n; i++){
+    if (TYPEOF(VECTOR_ELT(X,i)) != STRSXP){
+      LOGICAL(all_char)[0] = 0L;
+      break;
+    }
+  }
+
+  UNPROTECT(2);
+  return all_char;
+
+}
+
+
+
+
+
 
 
 

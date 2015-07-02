@@ -1,6 +1,11 @@
 #' Hashing R objects, big and small
 #'  
-#' More stuff here
+#' This package exports Paul Hsies's \code{SuperFastHash} C-code to R.
+#' It can be used to hash either whole R objects or, for vectors or lists,
+#' R objects can be hashed recursively, so one gets a set of hash values
+#' that is stored in a structure equivalent to the input.
+#'
+#'
 #'
 #' @name hashr-package
 #' @docType package
@@ -26,6 +31,10 @@
 #' \code{character} vector is hashed separately, based on the underlying
 #' \code{char} representation in \code{C}.
 #'
+#' @section Hash function:
+#' The hash function used is Paul Hsieh's' \code{SuperFastHash} function which is
+#' described on his \href{http://www.azillionmonkeys.com/qed/hash.html}{website}.
+#'
 #' @example ../examples/hash.R
 #' @export
 hash <- function(x,...){
@@ -43,7 +52,7 @@ hash.default <- function(x,...){
 #' @method hash character
 #'
 #' @param recursive hash each element separately?
-#' @param nthread maximum number of threads used in paralellisation
+#' @param nthread maximum number of threads used (currently only for \code{character} method)
 #' @rdname hash
 #' @export 
 hash.character <- function(x, recursive=TRUE, nthread=getOption("hashr_num_thread"),...){
@@ -60,14 +69,27 @@ hash.character <- function(x, recursive=TRUE, nthread=getOption("hashr_num_threa
 #'
 #' @rdname hash
 #' @export 
-hash.list <- function(x, recursive=TRUE, ...){
+hash.list <- function(x, recursive=TRUE, nthread = getOption("hashr_num_thread"), ...){
   if (recursive){
-    # todo: multicore over x
-    lapply(x,hash,...)
+    if (all_char_list(x)){
+      .Call("R_hash_charlist",x,as.integer(nthread))
+    }
+    lapply(x, hash, ...)
   } else {
-    hash.default(x,...)
+    hash.default(x, ...)
   }
 }
+
+# determine whether a list contains only character vectors.
+all_char_list <- function(x){
+  .Call("R_all_char",x)
+}
+
+
+
+
+
+
 
 
 
