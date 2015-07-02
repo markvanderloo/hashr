@@ -10,6 +10,9 @@ test_that("",{
   m <- lm(Sepal.Width ~ Sepal.Length, data=iris)
   expect_true(is.integer(hash(m)))
   expect_equal(length(hash(m)),1L)
+  x <- c("call any vegetable","and the chances are good","that the vegetable will respond to you")
+  L <- strsplit(x," ",fixed=TRUE)
+  expect_true(all(sapply(hash(L),is.integer)))
 })
 
 
