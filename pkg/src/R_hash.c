@@ -56,11 +56,9 @@ SEXP R_hash_charvec(SEXP X, SEXP NTHRD){
     #ifdef _OPENMP
     ID = omp_get_thread_num();
     nthreads = omp_get_num_threads();
-    h += ID; 
     #endif
     for (int i = ID; i < n; i += nthreads ) {
-     (*h) = (int) SuperFastHash( CHAR(STRING_ELT(X,i)), length(STRING_ELT(X,i)));
-     h += nthreads;
+     h[i] = (int) SuperFastHash( CHAR(STRING_ELT(X,i)), length(STRING_ELT(X,i)));
     }
   }// end of parallel region
 
@@ -87,22 +85,26 @@ SEXP R_hash_charlist(SEXP X, SEXP NTHRD){
     SET_VECTOR_ELT(out, i, allocVector(INTSXP, ni));
   }
 
-  SEXP S;
-  int *v;
 
   #ifdef _OPENMP
-  #pragma omp parallel for num_threads(nthrd)
+  #pragma omp parallel num_threads(nthrd)
   #endif
-  for ( int i = 0; i < n; i++ ){
-    S = VECTOR_ELT(X,i);
-    v = INTEGER(VECTOR_ELT(out, i));
-    ni = length(S);
-    for ( int j = 0; j < ni; j++){
-      v[j] = SuperFastHash( CHAR(STRING_ELT(S,j)),length(STRING_ELT(S,j)) );
+  {
+    SEXP S;
+    int *v;
+    int n_str;
+    #ifdef _OPENMP
+    #pragma omp for
+    #endif
+    for ( int i = 0; i < n; i++ ){
+      S = VECTOR_ELT(X,i);
+      v = INTEGER(VECTOR_ELT(out, i));
+      n_str = length(S);
+      for ( int j = 0; j < n_str; j++){
+        v[j] = SuperFastHash( CHAR(STRING_ELT(S,j)),length(STRING_ELT(S,j)) );
+      }
     }
-    
-  }
-
+  }// end of parallel region
 
   UNPROTECT(3);
   return out;

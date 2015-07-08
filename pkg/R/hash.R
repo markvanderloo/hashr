@@ -37,7 +37,7 @@
 #'
 #' @example ../examples/hash.R
 #' @export
-hash <- function(x,...){
+hash <- function(x, ...){
   UseMethod('hash')
 }
 
@@ -71,10 +71,11 @@ hash.character <- function(x, recursive=TRUE, nthread=getOption("hashr_num_threa
 #' @export 
 hash.list <- function(x, recursive=TRUE, nthread = getOption("hashr_num_thread"), ...){
   if (recursive){
-    if (all_char_list(x)){
-      .Call("R_hash_charlist",x,as.integer(nthread))
+    if ( all_char_list(x) ){
+      .Call("R_hash_charlist", x, as.integer(nthread))
+    } else {
+      lapply(x, hash, ...)
     }
-    lapply(x, hash, ...)
   } else {
     hash.default(x, ...)
   }
@@ -84,12 +85,6 @@ hash.list <- function(x, recursive=TRUE, nthread = getOption("hashr_num_thread")
 all_char_list <- function(x){
   .Call("R_all_char",x)
 }
-
-
-
-
-
-
 
 
 
