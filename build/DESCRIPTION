@@ -5,11 +5,14 @@ Title: Hash R Objects to Integers Fast
 LazyData: no
 Type: Package
 LazyLoad: yes
-Authors@R: c( person("Mark", "van der Loo", role=c("aut","cre"),email="mark.vanderloo@gmail.com"))
-Description: A hash function maps a string of bits to an integer. 
-Version: 0.0.1
-Depends: R (>= 2.15.3)
+Authors@R: c( 
+       person("Mark", "van der Loo", role=c("aut","cre"),email="mark.vanderloo@gmail.com")
+     , person("Paul", "Hsieh", role=c("ctb")))
+Description: Apply the SuperFastHash algorithm to any R object. Hash whole R objects or, 
+     for vectors or lists, hash R objects to obtain a set of hash values that is stored 
+     in a structure equivalent to the input. 
+Version: 0.1.0
 URL: https://github.com/markvanderloo/hashr
 BugReports: https://github.com/markvanderloo/hashr/issues
-Date: 2015-06-23
+Date: 2015-08-05
 Suggests: testthat

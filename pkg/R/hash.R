@@ -1,8 +1,8 @@
-#' Hashing R objects, big and small
+#' Hash R Objects Quickly
 #'  
 #' This package exports Paul Hsies's \code{SuperFastHash} C-code to R.
 #' It can be used to hash either whole R objects or, for vectors or lists,
-#' R objects can be hashed recursively, so one gets a set of hash values
+#' R objects can be hashed recursively so one obtains a set of hash values
 #' that is stored in a structure equivalent to the input.
 #'
 #'
@@ -30,10 +30,17 @@
 #' \code{recursive=FALSE}. When \code{recursive=TRUE} each element of a
 #' \code{character} vector is hashed separately, based on the underlying
 #' \code{char} representation in \code{C}.
+#' 
+#' @section Parallelization:
+#' On systems supporting openMP, this function is able to use multiple cores.
+#' By default, a sensible number of cores is chosen. See the entry on
+#' \href{https://cran.r-project.org/doc/manuals/r-release/R-exts.html#OpenMP-support}{OpenMP Support} in the writing R extensions manual to check whether your system supports it.
 #'
 #' @section Hash function:
 #' The hash function used is Paul Hsieh's' \code{SuperFastHash} function which is
 #' described on his \href{http://www.azillionmonkeys.com/qed/hash.html}{website}.
+#' As the title of the algorithm suggests, this hashing algorithm is not aimed to
+#' be used as a secure hash, and it is probably a bad idea to use it for that purpose.
 #'
 #' @example ../examples/hash.R
 #' @export
@@ -52,7 +59,7 @@ hash.default <- function(x,...){
 #' @method hash character
 #'
 #' @param recursive hash each element separately?
-#' @param nthread maximum number of threads used (currently only for \code{character} method)
+#' @param nthread maximum number of threads used.
 #' @rdname hash
 #' @export 
 hash.character <- function(x, recursive=TRUE, nthread=getOption("hashr_num_thread"),...){
