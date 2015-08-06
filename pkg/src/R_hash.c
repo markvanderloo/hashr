@@ -64,11 +64,11 @@ SEXP R_hash_charvec(SEXP X, SEXP NTHRD, SEXP MODE){
       }
     } else if (INTEGER(MODE)[0] == 1){ // hash pointer to unique string
       char c[sizeof(long int)];
-      long int ii;
+      unsigned long long int ii=0;
       for (int i = ID; i < n; i += nthreads ) {
-       ii = (long int) CHAR(STRING_ELT(X,i));
-       memcpy(c, &ii, sizeof(long int));
-       h[i] = (int) SuperFastHash( c, sizeof(long int));
+       ii = (unsigned long long int) CHAR(STRING_ELT(X,i));
+       memcpy(c, &ii, sizeof(long long int));
+       h[i] = (int) SuperFastHash( c, sizeof(long long int));
       }
     } else {
       error("Unrecognized hash mode");
