@@ -60,12 +60,17 @@ hash.default <- function(x,...){
 #'
 #' @param recursive hash each element separately?
 #' @param nthread maximum number of threads used.
+#' @param what Hash the string or the pointer to the string (faster, but not reproducible
+#'   over R sessions)
 #' @rdname hash
 #' @export 
-hash.character <- function(x, recursive=TRUE, nthread=getOption("hashr_num_thread"),...){
+hash.character <- function(x, recursive=TRUE, what = c("string","pointer"), 
+    nthread=getOption("hashr_num_thread"),...){
   stopifnot(is.numeric(nthread))
+  what <- match.arg(what)
+  mode = c(string=0L,pointer=1L)
   if (recursive){
-    .Call("R_hash_charvec",x,as.integer(nthread))
+    .Call("R_hash_charvec",x,as.integer(nthread),mode[what])
   } else {
     hash.default(x,...)
   }

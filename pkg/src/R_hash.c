@@ -37,9 +37,10 @@ SEXP R_hash_raw(SEXP X){
   return h;
 }
 
-SEXP R_hash_charvec(SEXP X, SEXP NTHRD){
+SEXP R_hash_charvec(SEXP X, SEXP NTHRD, SEXP MODE){
   PROTECT(X);
   PROTECT(NTHRD);
+  PROTECT(MODE); 
   int n = length(X)
     , nthrd = INTEGER(NTHRD)[0];
 
@@ -57,12 +58,24 @@ SEXP R_hash_charvec(SEXP X, SEXP NTHRD){
     ID = omp_get_thread_num();
     nthreads = omp_get_num_threads();
     #endif
-    for (int i = ID; i < n; i += nthreads ) {
-     h[i] = (int) SuperFastHash( CHAR(STRING_ELT(X,i)), length(STRING_ELT(X,i)));
+    if (INTEGER(MODE)[0] == 0){ // has string
+      for (int i = ID; i < n; i += nthreads ) {
+       h[i] = (int) SuperFastHash( CHAR(STRING_ELT(X,i)), length(STRING_ELT(X,i)));
+      }
+    } else if (INTEGER(MODE)[0] == 1){ // hash pointer to unique string
+      char c[sizeof(long int)];
+      long int ii;
+      for (int i = ID; i < n; i += nthreads ) {
+       ii = (long int) CHAR(STRING_ELT(X,i));
+       memcpy(c, &ii, sizeof(long int));
+       h[i] = (int) SuperFastHash( c, sizeof(long int));
+      }
+    } else {
+      error("Unrecognized hash mode");
     }
   }// end of parallel region
 
-  UNPROTECT(3);
+  UNPROTECT(4);
   return H;
 
 }
