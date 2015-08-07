@@ -22,7 +22,7 @@ install.packages("hashr")
 If you are in for some excitement you can build the development version by cloning this github page.
 In a `bash` command shell do:
 ```
-git clone http://github.com/markvanderloo/hashr.git
+git clone https://github.com/markvanderloo/hashr.git
 cd hashr
 ./build.bash
 R CMD INSTALL output/hashr*.tar.gz
