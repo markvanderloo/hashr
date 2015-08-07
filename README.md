@@ -4,3 +4,28 @@
 
 # hashr
 Quicly compute hash values for R objects
+
+# Installation
+From R:
+```
+install.packages("hashr")
+```
+The latest beta-versions are available through my [drat](http://www.r-pkg.org/pkg/drat) repository. 
+```
+# if you don't have drat:
+install.packages('drat')
+
+# to install from my drat repo:
+drat::addRepo("markvanderloo")
+install.packages("hashr")
+```
+If you are in for some excitement you can build the development version by cloning this github page.
+In a `bash` command shell do:
+```
+git clone http://github.com/markvanderloo/hashr.git
+cd hashr
+./build.bash
+R CMD INSTALL output/hashr*.tar.gz
+```
+
+
