@@ -30,6 +30,7 @@ revdep: pkg
 	R -s -e "out <- tools::check_packages_in_dir('revdep',reverse=list(which='most'),Ncpus=3); print(summary(out)); saveRDS(out, file='revdep/output.RDS')"
 
 clean:
+	rm -rf pkg/src/*.so pkg/src/*.o
 	rm -rf *.Rcheck
 	rm -rf revdep
 	rm -f *.tar.gz

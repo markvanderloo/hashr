@@ -16,6 +16,8 @@
 # ignored directories
 output/
 pkg/man/
+*.Rcheck/
 
+*.tar.gz
 
 .Rproj.user
