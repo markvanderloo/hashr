@@ -1,5 +1,6 @@
 #' Hash R Objects Quickly
-#'  
+#' 
+#' @description 
 #' This package exports Paul Hsies's \code{SuperFastHash} C-code to R.
 #' It can be used to hash either whole R objects or, for vectors or lists,
 #' R objects can be hashed recursively so one obtains a set of hash values
@@ -52,7 +53,7 @@ hash <- function(x, ...){
 #' @rdname hash
 hash.default <- function(x,...){
   X <- serialize(x, connection=NULL, ...)
-  .Call("R_hash_raw", X)
+  .Call("R_hash_raw", X, PACKAGE="hashr")
 }
 
 #'
@@ -70,7 +71,7 @@ hash.character <- function(x, recursive=TRUE, what = c("string","pointer"),
   what <- match.arg(what)
   mode = c(string=0L,pointer=1L)
   if (recursive){
-    .Call("R_hash_charvec",x,as.integer(nthread),mode[what])
+    .Call("R_hash_charvec",x,as.integer(nthread),mode[what], PACKAGE="hashr")
   } else {
     hash.default(x,...)
   }
@@ -84,7 +85,7 @@ hash.character <- function(x, recursive=TRUE, what = c("string","pointer"),
 hash.list <- function(x, recursive=TRUE, nthread = getOption("hashr_num_thread"), ...){
   if (recursive){
     if ( all_char_list(x) ){
-      .Call("R_hash_charlist", x, as.integer(nthread))
+      .Call("R_hash_charlist", x, as.integer(nthread), PACKAGE="hashr")
     } else {
       lapply(x, hash, ...)
     }
@@ -95,7 +96,7 @@ hash.list <- function(x, recursive=TRUE, nthread = getOption("hashr_num_thread")
 
 # determine whether a list contains only character vectors.
 all_char_list <- function(x){
-  .Call("R_all_char",x)
+  .Call("R_all_char",x, PACKAGE="hashr")
 }
 
 
