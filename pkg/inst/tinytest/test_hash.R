@@ -15,6 +15,7 @@ L <- strsplit(x," ",fixed=TRUE)
 expect_true(all(sapply(hash(L),is.integer)))
 
 
-
+m1 <- lm(Sepal.Width ~ Sepal.Length, data=iris)
+expect_identical(hash(m1), hash(m))
 
 

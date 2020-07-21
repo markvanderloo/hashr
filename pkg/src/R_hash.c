@@ -25,22 +25,17 @@
 #endif
 
 SEXP R_hash_raw(SEXP X){
-  PROTECT(X);
   
   SEXP h; 
   PROTECT(h = allocVector(INTSXP,1L));
   
   INTEGER(h)[0] = (int) SuperFastHash((char *) RAW(X),length(X));
 
-
-  UNPROTECT(2);
+  UNPROTECT(1);
   return h;
 }
 
 SEXP R_hash_charvec(SEXP X, SEXP NTHRD, SEXP MODE){
-  PROTECT(X);
-  PROTECT(NTHRD);
-  PROTECT(MODE); 
   int n = length(X)
     , nthrd = INTEGER(NTHRD)[0];
 
@@ -75,7 +70,7 @@ SEXP R_hash_charvec(SEXP X, SEXP NTHRD, SEXP MODE){
     }
   }// end of parallel region
 
-  UNPROTECT(4);
+  UNPROTECT(1);
   return H;
 
 }
@@ -83,8 +78,6 @@ SEXP R_hash_charvec(SEXP X, SEXP NTHRD, SEXP MODE){
 
 // hash a list consisting of only character vectors
 SEXP R_hash_charlist(SEXP X, SEXP NTHRD){
-  PROTECT(X);
-  PROTECT(NTHRD);
   int n = length(X)
     , nthrd = INTEGER(NTHRD)[0];
 
@@ -119,14 +112,13 @@ SEXP R_hash_charlist(SEXP X, SEXP NTHRD){
     }
   }// end of parallel region
 
-  UNPROTECT(3);
+  UNPROTECT(2);
   return out;
 
 }
 
 // Determine whether all elements of a list are of type charater.
 SEXP R_all_char(SEXP X){
-  PROTECT(X);
   SEXP all_char;
   all_char = PROTECT(allocVector(LGLSXP,1L));
 
@@ -139,7 +131,7 @@ SEXP R_all_char(SEXP X){
     }
   }
 
-  UNPROTECT(2);
+  UNPROTECT(1);
   return all_char;
 
 }

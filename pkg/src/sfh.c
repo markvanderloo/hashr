@@ -1,6 +1,13 @@
 /* The code below is copied with much gratitude from Paul Hsieh's
  * website: http://www.azillionmonkeys.com/qed/hash.html
  *
+ *
+ * 21-07-2020
+ * Two lines of code were changed by Mark van der Loo, as left shifts in
+ * unsigned char (cases rem=3, rem=2) could (and did) result in undefined 
+ * behaviour detected by UBSAN. No attempts were made to compare behaviour
+ * before and after the change.
+ *
  * This file is released under the GPL 2.1 license.
  */
 
@@ -73,14 +80,14 @@ uint32_t SuperFastHash (const char * data, int len) {
     switch (rem) {
       case 3: hash += get16bits (data);
       hash ^= hash << 16;
-      hash ^= ((signed char)data[sizeof (uint16_t)]) << 18;
+      hash ^= (unsigned char)data[sizeof (uint16_t)] << 18;
       hash += hash >> 11;
       break;
       case 2: hash += get16bits (data);
       hash ^= hash << 11;
       hash += hash >> 17;
       break;
-      case 1: hash += (signed char)*data;
+      case 1: hash += (signed char) ((unsigned char)*data);
       hash ^= hash << 10;
       hash += hash >> 1;
     }
