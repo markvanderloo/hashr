@@ -13,9 +13,9 @@ Description: Apply an adaptation of the SuperFastHash algorithm to any R
     a set of hash values that is stored in a structure equivalent to the input. See
     <http://www.azillionmonkeys.com/qed/hash.html> for a description of the hash
     algorithm.
-Version: 0.1.2.3
+Version: 0.1.4
 URL: https://github.com/markvanderloo/hashr
 BugReports: https://github.com/markvanderloo/hashr/issues
 Suggests: tinytest
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Encoding: UTF-8

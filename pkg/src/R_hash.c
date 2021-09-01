@@ -16,13 +16,13 @@
  *  You can contact the author at: mark _dot_ vanderloo _at_ gmail _dot_ com
  */
 
-#include <R.h>
-#include <Rdefines.h>
-#include <stdint.h>
-#include "sfh.h"
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+#include <stdint.h>
+#include <R.h>
+#include <Rdefines.h>
+#include "sfh.h"
 
 SEXP R_hash_raw(SEXP X){
   

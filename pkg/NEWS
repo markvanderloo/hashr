@@ -1,3 +1,8 @@
+versioin 0.1.4
+- Updated C-code for compatability with CLANG compiler (Thanks
+  to Brian Ripley for pointing out the specific noncompliance 
+  with WRE)
+
 version 0.1.3
 - BREAKING: fixed undefined behavior in SFH algorithm. This means
   that sfh will give different integer output than before.
