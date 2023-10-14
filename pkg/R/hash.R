@@ -20,6 +20,7 @@
 #'
 #'
 #' @param x Object to hash
+#' @param recursive hash each element separately? Only allowed for `list` and `character` types.
 #' @param ... Arguments to be passed to other methods. In particular, for the default method, 
 #'  these arguments are passed to \code{\link[base]{serialize}}.
 #'
@@ -51,7 +52,11 @@ hash <- function(x, ...){
 
 #' @export
 #' @rdname hash
-hash.default <- function(x,...){
+hash.default <- function(x, recursive=FALSE, ...){
+  if(recursive) { 
+    stop("`recursive=TRUE` is only allowed for `list` and `character` types.") 
+  }
+  
   X <- serialize(x, connection=NULL, ...)
   .Call("R_hash_raw", X, PACKAGE="hashr")
 }
@@ -59,7 +64,6 @@ hash.default <- function(x,...){
 #'
 #' @method hash character
 #'
-#' @param recursive hash each element separately?
 #' @param nthread maximum number of threads used.
 #' @param what Hash the string or the pointer to the string (faster, but not reproducible
 #'   over R sessions)
