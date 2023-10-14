@@ -3,6 +3,8 @@
 
 
 expect_true(is.integer(hash(10)))
+expect_true(is.integer(hash(10, recursive=FALSE)))
+expect_error(hash(10, recursive=TRUE))
 expect_equal(length(hash(c("aap","noot"))),2L)
 expect_equal(length(hash(c("aap","noot"),recursive=FALSE)),1L)
 expect_equal(length(hash(list(1,c("aap","noot")))),2L)
@@ -17,5 +19,4 @@ expect_true(all(sapply(hash(L),is.integer)))
 
 m1 <- lm(Sepal.Width ~ Sepal.Length, data=iris)
 expect_identical(hash(m1), hash(m))
-
 
