@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/markvanderloo/hashr.svg)](https://travis-ci.org/markvanderloo/hashr) 
 [![Coverage Status](https://coveralls.io/repos/markvanderloo/hashr/badge.svg?branch=master)](https://coveralls.io/r/markvanderloo/hashr?branch=master)
 [![CRAN version](http://www.r-pkg.org/badges/version/hashr)](http://www.r-pkg.org/pkg/hashr)
-[![status](https://tinyverse.netlify.com/badge/hashr)](https://CRAN.R-project.org/package=<package>)
+[![status](https://tinyverse.netlify.app/badge/hashr)](https://CRAN.R-project.org/package=<package>)
 [![RStudio CRAN Downloads](http://cranlogs.r-pkg.org/badges/hashr)](http://www.r-pkg.org/pkg/hashr)
 
 # hashr
